@@ -1,4 +1,4 @@
-# AI SQL Auditor — Does AI's SQL Advice Actually Hold Up?
+# AI SQL Auditor: Does AI's SQL Advice Actually Hold Up?
 
 AI coding assistants constantly suggest SQL "optimizations." Nobody
 usually checks if they're actually right. This project does — across
