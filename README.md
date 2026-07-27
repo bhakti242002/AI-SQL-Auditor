@@ -107,6 +107,3 @@ python verify_with_explain.py
 # 6. Open results/verified_results.csv in Power BI, or open the .pbix directly
 ```
 
-See `SETUP.md` for the fully detailed walkthrough, including Windows-specific
-notes and troubleshooting.
-
