@@ -1,0 +1,121 @@
+filename,category,issue_type,severity,issues_found,orig_exec_ms,rewritten_exec_ms,verdict
+c01_correlated_subquery_v1.sql,correlated_subquery,correlated subquery,high,True,70.512,24.524,IMPROVED (65.2% faster)
+c01_correlated_subquery_v2.sql,correlated_subquery,correlated subquery,high,True,67.746,22.382,IMPROVED (67.0% faster)
+c01_correlated_subquery_v3.sql,correlated_subquery,correlated subquery,high,True,63.45,21.817,IMPROVED (65.6% faster)
+c01_correlated_subquery_v4.sql,correlated_subquery,correlated subquery,high,True,68.948,23.449,IMPROVED (66.0% faster)
+c01_correlated_subquery_v5.sql,correlated_subquery,correlated subquery,high,True,66.102,23.104,IMPROVED (65.0% faster)
+c01_correlated_subquery_v6.sql,correlated_subquery,correlated subquery,high,True,61.388,19.565,IMPROVED (68.1% faster)
+c01_correlated_subquery_v7.sql,correlated_subquery,correlated subquery,high,True,69.369,23.918,IMPROVED (65.5% faster)
+c01_correlated_subquery_v8.sql,correlated_subquery,correlated subquery,high,True,69.341,19.935,IMPROVED (71.3% faster)
+c02_select_star_v1.sql,select_star,select *,medium,True,14.325,13.703,NO_MEANINGFUL_CHANGE
+c02_select_star_v2.sql,select_star,select *,medium,True,14.492,13.483,NO_MEANINGFUL_CHANGE
+c02_select_star_v3.sql,select_star,select *,medium,True,14.039,12.359,NO_MEANINGFUL_CHANGE
+c02_select_star_v4.sql,select_star,select *,medium,True,12.76,11.602,NO_MEANINGFUL_CHANGE
+c02_select_star_v5.sql,select_star,select *,medium,True,16.155,16.777,NO_MEANINGFUL_CHANGE
+c02_select_star_v6.sql,select_star,select *,medium,True,14.311,13.11,NO_MEANINGFUL_CHANGE
+c02_select_star_v7.sql,select_star,select *,medium,True,17.22,19.878,WORSE (15.4% slower)
+c02_select_star_v8.sql,select_star,select *,medium,True,19.71,17.99,NO_MEANINGFUL_CHANGE
+c03_not_in_nulls_v1.sql,not_in_nulls,NOT IN with nulls,high,True,9.759,10.601,NO_MEANINGFUL_CHANGE
+c03_not_in_nulls_v2.sql,not_in_nulls,NOT IN with nulls,high,True,11.319,10.532,NO_MEANINGFUL_CHANGE
+c03_not_in_nulls_v3.sql,not_in_nulls,NOT IN with nulls,high,True,9.576,9.907,NO_MEANINGFUL_CHANGE
+c03_not_in_nulls_v4.sql,not_in_nulls,NOT IN with nulls,high,True,10.004,10.056,NO_MEANINGFUL_CHANGE
+c03_not_in_nulls_v5.sql,not_in_nulls,NOT IN with nulls,high,True,9.674,9.933,NO_MEANINGFUL_CHANGE
+c03_not_in_nulls_v6.sql,not_in_nulls,NOT IN with nulls,high,True,9.609,9.804,NO_MEANINGFUL_CHANGE
+c03_not_in_nulls_v7.sql,not_in_nulls,NOT IN with nulls,high,True,9.588,9.153,NO_MEANINGFUL_CHANGE
+c03_not_in_nulls_v8.sql,not_in_nulls,NOT IN with nulls,high,True,9.369,9.154,NO_MEANINGFUL_CHANGE
+c04_function_on_column_v1.sql,function_on_column,function on filter column,medium,True,15.454,5.109,IMPROVED (66.9% faster)
+c04_function_on_column_v2.sql,function_on_column,function on filter column,medium,True,15.01,4.982,IMPROVED (66.8% faster)
+c04_function_on_column_v3.sql,function_on_column,function on filter column,high,True,14.865,4.661,IMPROVED (68.6% faster)
+c04_function_on_column_v4.sql,function_on_column,function on filter column,medium,True,14.558,5.594,IMPROVED (61.6% faster)
+c04_function_on_column_v5.sql,function_on_column,function on filter column,medium,True,18.957,4.902,IMPROVED (74.1% faster)
+c04_function_on_column_v6.sql,function_on_column,function on filter column,medium,True,18.904,5.931,IMPROVED (68.6% faster)
+c04_function_on_column_v7.sql,function_on_column,function on filter column,high,True,8.561,2.275,IMPROVED (73.4% faster)
+c04_function_on_column_v8.sql,function_on_column,function on filter column,high,True,10.497,3.047,IMPROVED (71.0% faster)
+c05_missing_index_range_v1.sql,missing_index_range,missing index on filter column,high,True,6.738,,COULD_NOT_VERIFY
+c05_missing_index_range_v2.sql,missing_index_range,missing index on filter columns,high,True,7.118,6.693,NO_MEANINGFUL_CHANGE
+c05_missing_index_range_v3.sql,missing_index_range,missing index on filter column,high,True,7.081,6.342,NO_MEANINGFUL_CHANGE
+c05_missing_index_range_v4.sql,missing_index_range,missing index on filter column,high,True,7.1,6.341,NO_MEANINGFUL_CHANGE
+c05_missing_index_range_v5.sql,missing_index_range,missing index on filter columns,high,True,5.966,7.523,WORSE (26.1% slower)
+c05_missing_index_range_v6.sql,missing_index_range,missing index on filter columns,high,True,7.598,7.197,NO_MEANINGFUL_CHANGE
+c05_missing_index_range_v7.sql,missing_index_range,missing index on filter columns,high,True,6.128,7.195,WORSE (17.4% slower)
+c05_missing_index_range_v8.sql,missing_index_range,missing index on filter columns,high,True,6.338,7.258,NO_MEANINGFUL_CHANGE
+c06_or_blocks_index_v1.sql,or_blocks_index,OR prevents index usage,medium,True,3.215,5.682,WORSE (76.7% slower)
+c06_or_blocks_index_v2.sql,or_blocks_index,OR blocks index usage,medium,True,3.106,15.29,WORSE (392.3% slower)
+c06_or_blocks_index_v3.sql,or_blocks_index,OR on non-indexed columns,medium,True,3.183,5.803,WORSE (82.3% slower)
+c06_or_blocks_index_v4.sql,or_blocks_index,OR prevents index usage,medium,True,3.196,6.036,WORSE (88.9% slower)
+c06_or_blocks_index_v5.sql,or_blocks_index,OR on unindexed columns prevents efficient filtering,medium,True,3.189,6.075,WORSE (90.5% slower)
+c06_or_blocks_index_v6.sql,or_blocks_index,OR on multiple columns blocks index usage,medium,True,3.112,5.857,WORSE (88.2% slower)
+c06_or_blocks_index_v7.sql,or_blocks_index,OR on unindexed columns preventing efficient filtering,medium,True,4.056,6.617,WORSE (63.1% slower)
+c06_or_blocks_index_v8.sql,or_blocks_index,OR prevents index usage,medium,True,3.149,6.573,WORSE (108.7% slower)
+c07_leading_wildcard_like_v1.sql,leading_wildcard_like,function on filter column,medium,True,0.608,0.616,NO_MEANINGFUL_CHANGE
+c07_leading_wildcard_like_v2.sql,leading_wildcard_like,function on filter column,medium,True,0.478,0.489,NO_MEANINGFUL_CHANGE
+c07_leading_wildcard_like_v3.sql,leading_wildcard_like,function on filter column,medium,True,0.455,0.426,NO_MEANINGFUL_CHANGE
+c07_leading_wildcard_like_v4.sql,leading_wildcard_like,function on filter column,medium,True,0.848,0.559,IMPROVED (34.1% faster)
+c07_leading_wildcard_like_v5.sql,leading_wildcard_like,function on filter column,medium,True,0.595,1.747,WORSE (193.6% slower)
+c07_leading_wildcard_like_v6.sql,leading_wildcard_like,function on filter column,medium,True,0.672,0.611,NO_MEANINGFUL_CHANGE
+c07_leading_wildcard_like_v7.sql,leading_wildcard_like,function on filter column,medium,True,0.531,0.529,NO_MEANINGFUL_CHANGE
+c07_leading_wildcard_like_v8.sql,leading_wildcard_like,function on filter column,medium,True,0.476,0.484,NO_MEANINGFUL_CHANGE
+c08_implicit_cast_v1.sql,implicit_cast,function on filter column,high,True,0.073,0.021,IMPROVED (71.2% faster)
+c08_implicit_cast_v2.sql,implicit_cast,function on filter column,high,True,0.057,0.013,IMPROVED (77.2% faster)
+c08_implicit_cast_v3.sql,implicit_cast,function on filter column,high,True,0.056,0.015,IMPROVED (73.2% faster)
+c08_implicit_cast_v4.sql,implicit_cast,function on filter column,high,True,0.059,0.015,IMPROVED (74.6% faster)
+c08_implicit_cast_v5.sql,implicit_cast,function on filter column,high,True,0.059,0.015,IMPROVED (74.6% faster)
+c08_implicit_cast_v6.sql,implicit_cast,function on filter column,high,True,0.061,0.015,IMPROVED (75.4% faster)
+c08_implicit_cast_v7.sql,implicit_cast,function on filter column,high,True,0.115,0.017,IMPROVED (85.2% faster)
+c08_implicit_cast_v8.sql,implicit_cast,function on filter column,high,True,0.083,0.019,IMPROVED (77.1% faster)
+c09_incomplete_join_condition_v1.sql,incomplete_join_condition,select *,low,True,8.065,9.613,WORSE (19.2% slower)
+c09_incomplete_join_condition_v2.sql,incomplete_join_condition,implicit cross join / missing join condition,medium,True,8.226,8.075,NO_MEANINGFUL_CHANGE
+c09_incomplete_join_condition_v3.sql,incomplete_join_condition,implicit cross join / missing join condition,medium,True,8.99,8.19,NO_MEANINGFUL_CHANGE
+c09_incomplete_join_condition_v4.sql,incomplete_join_condition,implicit cross join / missing join condition,medium,True,8.407,8.333,NO_MEANINGFUL_CHANGE
+c09_incomplete_join_condition_v5.sql,incomplete_join_condition,implicit cross join / missing join condition,medium,True,9.151,8.357,NO_MEANINGFUL_CHANGE
+c09_incomplete_join_condition_v6.sql,incomplete_join_condition,implicit cross join / missing join condition,medium,True,8.418,8.94,NO_MEANINGFUL_CHANGE
+c09_incomplete_join_condition_v7.sql,incomplete_join_condition,function on filter column,medium,True,9.378,9.498,NO_MEANINGFUL_CHANGE
+c09_incomplete_join_condition_v8.sql,incomplete_join_condition,function on filter column,medium,True,8.824,9.701,NO_MEANINGFUL_CHANGE
+c10_distinct_masks_fanout_v1.sql,distinct_masks_fanout,distinct masks fanout,high,True,110.78,46.811,IMPROVED (57.7% faster)
+c10_distinct_masks_fanout_v2.sql,distinct_masks_fanout,DISTINCT masks fanout from join,high,True,103.935,9.177,IMPROVED (91.2% faster)
+c10_distinct_masks_fanout_v3.sql,distinct_masks_fanout,DISTINCT masks fanout from join,high,True,115.632,33.572,IMPROVED (71.0% faster)
+c10_distinct_masks_fanout_v4.sql,distinct_masks_fanout,DISTINCT masks fanout from join,high,True,77.581,,COULD_NOT_VERIFY
+c10_distinct_masks_fanout_v5.sql,distinct_masks_fanout,DISTINCT masks fanout from JOIN,high,True,63.128,24.163,IMPROVED (61.7% faster)
+c10_distinct_masks_fanout_v6.sql,distinct_masks_fanout,DISTINCT masks fanout from join,high,True,57.975,28.472,IMPROVED (50.9% faster)
+c10_distinct_masks_fanout_v7.sql,distinct_masks_fanout,DISTINCT masks fanout from join,high,True,32.339,4.011,IMPROVED (87.6% faster)
+c10_distinct_masks_fanout_v8.sql,distinct_masks_fanout,DISTINCT masks fanout from joins,high,True,0.488,1.555,WORSE (218.6% slower)
+c11_subquery_in_select_v1.sql,subquery_in_select,correlated subquery,medium,True,1.0,4.808,WORSE (380.8% slower)
+c11_subquery_in_select_v2.sql,subquery_in_select,correlated subquery,medium,True,0.787,3.597,WORSE (357.1% slower)
+c11_subquery_in_select_v3.sql,subquery_in_select,correlated subquery,medium,True,0.267,0.192,IMPROVED (28.1% faster)
+c11_subquery_in_select_v4.sql,subquery_in_select,correlated subquery,medium,True,0.265,2.85,WORSE (975.5% slower)
+c11_subquery_in_select_v5.sql,subquery_in_select,correlated subquery,medium,True,0.965,3.472,WORSE (259.8% slower)
+c11_subquery_in_select_v6.sql,subquery_in_select,correlated subquery,medium,True,0.897,3.413,WORSE (280.5% slower)
+c11_subquery_in_select_v7.sql,subquery_in_select,correlated subquery,medium,True,0.257,0.112,IMPROVED (56.4% faster)
+c11_subquery_in_select_v8.sql,subquery_in_select,correlated subquery,medium,True,0.25,2.882,WORSE (1052.8% slower)
+c12_sort_before_limit_v1.sql,sort_before_limit,sort without supporting index,medium,True,17.004,,COULD_NOT_VERIFY
+c12_sort_before_limit_v2.sql,sort_before_limit,function on filter column,medium,True,15.69,,COULD_NOT_VERIFY
+c12_sort_before_limit_v3.sql,sort_before_limit,function on filter column,medium,True,17.254,,COULD_NOT_VERIFY
+c12_sort_before_limit_v4.sql,sort_before_limit,function on filter column,medium,True,16.337,,COULD_NOT_VERIFY
+c12_sort_before_limit_v5.sql,sort_before_limit,function on filter column,medium,True,16.756,,COULD_NOT_VERIFY
+c12_sort_before_limit_v6.sql,sort_before_limit,function on filter column,medium,True,16.363,,COULD_NOT_VERIFY
+c12_sort_before_limit_v7.sql,sort_before_limit,function on filter column,medium,True,17.915,,COULD_NOT_VERIFY
+c12_sort_before_limit_v8.sql,sort_before_limit,function on filter column,medium,True,16.538,,COULD_NOT_VERIFY
+c13_in_instead_of_exists_v1.sql,in_instead_of_exists,IN with subquery instead of EXISTS/JOIN,medium,True,4.061,3.727,NO_MEANINGFUL_CHANGE
+c13_in_instead_of_exists_v2.sql,in_instead_of_exists,IN with subquery instead of EXISTS/JOIN,medium,True,4.139,3.09,IMPROVED (25.3% faster)
+c13_in_instead_of_exists_v3.sql,in_instead_of_exists,IN with subquery instead of EXISTS/JOIN,medium,True,3.888,3.295,IMPROVED (15.3% faster)
+c13_in_instead_of_exists_v4.sql,in_instead_of_exists,IN with subquery instead of EXISTS/JOIN,medium,True,3.591,3.109,NO_MEANINGFUL_CHANGE
+c13_in_instead_of_exists_v5.sql,in_instead_of_exists,IN with subquery instead of EXISTS/JOIN,medium,True,3.88,4.233,NO_MEANINGFUL_CHANGE
+c13_in_instead_of_exists_v6.sql,in_instead_of_exists,IN with subquery instead of EXISTS/JOIN,medium,True,3.308,3.904,WORSE (18.0% slower)
+c13_in_instead_of_exists_v7.sql,in_instead_of_exists,IN with subquery instead of EXISTS or JOIN,medium,True,3.308,4.434,WORSE (34.0% slower)
+c13_in_instead_of_exists_v8.sql,in_instead_of_exists,IN with subquery instead of EXISTS/JOIN,medium,True,5.03,3.17,IMPROVED (37.0% faster)
+c14_self_join_instead_of_window_v1.sql,self_join_instead_of_window,correlated subquery,high,True,919.894,0.476,IMPROVED (99.9% faster)
+c14_self_join_instead_of_window_v2.sql,self_join_instead_of_window,correlated subquery,high,True,1168.105,0.939,IMPROVED (99.9% faster)
+c14_self_join_instead_of_window_v3.sql,self_join_instead_of_window,correlated subquery,high,True,1191.12,0.582,IMPROVED (100.0% faster)
+c14_self_join_instead_of_window_v4.sql,self_join_instead_of_window,correlated subquery,high,True,1249.353,0.704,IMPROVED (99.9% faster)
+c14_self_join_instead_of_window_v5.sql,self_join_instead_of_window,correlated subquery,high,True,1125.463,0.857,IMPROVED (99.9% faster)
+c14_self_join_instead_of_window_v6.sql,self_join_instead_of_window,correlated subquery,high,True,1109.625,1.837,IMPROVED (99.8% faster)
+c14_self_join_instead_of_window_v7.sql,self_join_instead_of_window,correlated subquery,high,True,1115.593,1.46,IMPROVED (99.9% faster)
+c14_self_join_instead_of_window_v8.sql,self_join_instead_of_window,correlated subquery,high,True,1108.76,1.365,IMPROVED (99.9% faster)
+c15_having_instead_of_where_v1.sql,having_instead_of_where,function on filter column,medium,True,7.842,6.715,NO_MEANINGFUL_CHANGE
+c15_having_instead_of_where_v2.sql,having_instead_of_where,function on filter column,medium,True,7.966,15.705,WORSE (97.2% slower)
+c15_having_instead_of_where_v3.sql,having_instead_of_where,function on filter column,medium,True,8.427,7.695,NO_MEANINGFUL_CHANGE
+c15_having_instead_of_where_v4.sql,having_instead_of_where,function on filter column,medium,True,17.548,7.782,IMPROVED (55.7% faster)
+c15_having_instead_of_where_v5.sql,having_instead_of_where,function on filter column,medium,True,8.398,16.548,WORSE (97.0% slower)
+c15_having_instead_of_where_v6.sql,having_instead_of_where,function on filter column,medium,True,8.771,7.998,NO_MEANINGFUL_CHANGE
+c15_having_instead_of_where_v7.sql,having_instead_of_where,function on filter column,medium,True,7.21,6.941,NO_MEANINGFUL_CHANGE
+c15_having_instead_of_where_v8.sql,having_instead_of_where,function on filter column,medium,True,6.905,6.712,NO_MEANINGFUL_CHANGE
