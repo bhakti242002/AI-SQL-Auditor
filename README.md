@@ -1,7 +1,7 @@
 # AI SQL Auditor: Does AI's SQL Advice Actually Hold Up?
 
 AI coding assistants constantly suggest SQL "optimizations." Nobody
-usually checks if they're actually right. This project does — across
+usually checks if they're actually right. This project does, across
 **120 queries spanning 15 real-world SQL anti-pattern categories**,
 verified against real Postgres query plans, not just taken on faith.
 
@@ -29,7 +29,7 @@ verified against real Postgres query plans, not just taken on faith.
 
 Everyone's resume says "I use AI coding assistants." That's expected now,
 not a differentiator. What actually matters is whether you **verify** AI's
-output rather than trust it by default — this project is a structured test
+output rather than trust it by default. This project is a structured test
 of exactly that question, with a large enough sample (120 queries, 15
 categories) to say something more specific than a one-off anecdote.
 
@@ -110,15 +110,3 @@ python verify_with_explain.py
 See `SETUP.md` for the fully detailed walkthrough, including Windows-specific
 notes and troubleshooting.
 
-## Honest limitations
-
-- 120 queries across 15 categories is a solid scale for a portfolio
-  project, but it's a synthetic benchmark on synthetic data, not a claim
-  about every SQL pattern or every LLM.
-- Results are specific to the model used (Claude Sonnet) and the exact
-  prompt — a different model or prompt could reasonably produce different
-  reliability numbers.
-- One bug was caught and fixed mid-project (a missing `SELECT` keyword in
-  the correlated-subquery query template caused 8 queries to be
-  unexecutable as originally written) — fixed and re-verified before the
-  final results above.
