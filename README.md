@@ -1,135 +1,124 @@
-# AI SQL Auditor — Does AI's SQL advice actually hold up, at scale?
+# AI SQL Auditor — Does AI's SQL Advice Actually Hold Up?
 
-**The question:** AI coding assistants constantly suggest SQL "optimizations."
-Nobody checks if they're actually right. This project does — across 120
-queries, not just a handful.
+AI coding assistants constantly suggest SQL "optimizations." Nobody
+usually checks if they're actually right. This project does — across
+**120 queries spanning 15 real-world SQL anti-pattern categories**,
+verified against real Postgres query plans, not just taken on faith.
 
-**The method:** A templated generator (`generate_queries.py`) programmatically
-produces 120 TPC-H-style analytical queries spanning **15 well-known categories
-of real-world SQL anti-patterns** (8 varied instances of each): correlated
-subqueries, `SELECT *` on wide joins, `NOT IN` with nulls, functions wrapped
-around filter columns, missing indexes on range filters, `OR` conditions that
-block index use, leading-wildcard `LIKE`, implicit type casts, incomplete
-join conditions, `DISTINCT` masking join fan-out, N+1-style subqueries in the
-SELECT list, unnecessary sorts before a small `LIMIT`, `IN` vs `EXISTS`,
-inefficient self-joins, and `HAVING` used where `WHERE` would do.
+## The headline finding
 
-Each of the 120 queries is sent to the Claude API for review, and each
-suggested rewrite is then benchmarked against the original using Postgres's
-`EXPLAIN ANALYZE` on real (synthetic) data — not just taken on faith.
+> AI (Claude) flagged an issue in **100%** of 120 tested SQL queries.
+> Its suggested rewrites were then benchmarked against the originals using
+> `EXPLAIN ANALYZE` on real (synthetic) Postgres data. The suggested fix
+> **measurably improved performance in 38%** of cases, **made it worse in
+> 20%**, produced **no meaningful change in 34%**, and **failed to execute
+> at all in 8%**.
+>
+> Reliability was sharply **category-dependent** — near-perfect on
+> correlated subqueries, function-wrapped filter columns, implicit type
+> casts, and self-joins rewritten as window functions (all 100% improved,
+> some 99%+ faster). But AI's fixes were consistently **harmful** on
+> OR-conditions blocking index usage (100% made things worse, some 300%+
+> slower), and its rewrites for sort-before-limit queries **failed to
+> execute at all, every single time**.
 
-**The output:** A results table / dashboard showing, per category: how often
-AI flagged an issue, what it suggested, and whether the suggestion
-*measurably* improved execution time — or didn't, broken down across all
-15 anti-pattern categories rather than a handful of one-off examples.
+![Dashboard](Dashboard.png)
+*(Power BI dashboard — see `ai_sql_auditor_dashboard.pbix` for the interactive version)*
 
-**Why 120 and not fewer:** a small sample (e.g. 10) can only tell an anecdote.
-120 queries across 15 defined categories lets you say something with actual
-statistical shape — e.g. "AI's fixes for X category were reliable 90% of the
-time, but for Y category they made things worse more often than not." That
-category-level breakdown is the real finding, not just an overall percentage.
+## Why this matters
 
-## Setup
+Everyone's resume says "I use AI coding assistants." That's expected now,
+not a differentiator. What actually matters is whether you **verify** AI's
+output rather than trust it by default — this project is a structured test
+of exactly that question, with a large enough sample (120 queries, 15
+categories) to say something more specific than a one-off anecdote.
 
-1. **Install Postgres locally** (or use any reachable Postgres instance).
-   Create a database:
-   ```
-   createdb sql_auditor
-   psql -d sql_auditor -f schema.sql
-   ```
+## Methodology
 
-2. **Generate and load synthetic data:**
-   ```
-   pip install faker --break-system-packages
-   python generate_data.py
-   psql -d sql_auditor -f load_data.sql
-   ```
-   This creates ~80k lineitem rows and proportional data in the other 7
-   tables — enough for query plan differences to actually show up under
-   EXPLAIN ANALYZE, without needing a huge dataset.
+1. **Schema & data**: a TPC-H-style 8-table schema (`customer`, `orders`,
+   `lineitem`, `supplier`, `part`, etc.) populated with ~80K synthetic rows
+   — enough for real query plan differences to show up under `EXPLAIN
+   ANALYZE`, without needing a huge dataset.
+2. **Query generation**: a templated generator (`generate_queries.py`)
+   programmatically produces 120 queries — 8 varied instances across each
+   of 15 well-known SQL anti-pattern categories (correlated subqueries,
+   `SELECT *`, `NOT IN` with nulls, functions wrapped around filter
+   columns, missing indexes, `OR` conditions blocking index use, leading
+   wildcard `LIKE`, implicit type casts, incomplete join conditions,
+   `DISTINCT` masking join fan-out, N+1-style subqueries in `SELECT`,
+   unnecessary sorts before `LIMIT`, `IN` vs `EXISTS`, inefficient
+   self-joins, and `HAVING` used where `WHERE` would do).
+3. **AI review**: each query is sent to Claude (`ai_audit.py`) for review,
+   returning a structured verdict, severity, explanation, and suggested
+   rewrite.
+4. **Verification**: `verify_with_explain.py` runs `EXPLAIN (ANALYZE,
+   FORMAT JSON)` on both the original and the AI-suggested rewrite,
+   recording actual execution time and whether the suggestion measurably
+   helped, hurt, made no difference, or didn't even run.
+5. **(Optional supplement)**: `fetch_real_world_queries.py` and
+   `audit_real_world.py` pull real open-source SQL from a public dbt demo
+   project via the GitHub API for a qualitative-only review — clearly
+   *not* execution-verified, kept separate from the core findings.
 
-3. **Generate the 120-query test set:**
-   ```
-   python generate_queries.py
-   ```
-   This writes 120 `.sql` files into `queries/`, 8 variants each across
-   15 anti-pattern categories (named `c01_...` through `c15_...`).
+## Tech stack
 
-4. **Run the AI audit:**
-   ```
-   pip install anthropic --break-system-packages
-   export ANTHROPIC_API_KEY="your-key-here"
-   python ai_audit.py
-   ```
-   This sends each of the 120 queries in `queries/` to Claude and saves
-   structured findings to `results/ai_audit_results.json`. At 120 queries
-   with a 1-second pause between calls, expect this to take **~2-3 minutes**,
-   and cost roughly **$0.50–$2** in API credits depending on query length —
-   top up your Anthropic console credits accordingly before running.
+Python · PostgreSQL · Claude API (Anthropic) · Power BI · GitHub API
 
-5. **Verify the AI's suggestions against real query plans:**
-   ```
-   pip install psycopg2-binary --break-system-packages
-   python verify_with_explain.py
-   ```
-   This runs `EXPLAIN (ANALYZE, FORMAT JSON)` on the original and
-   AI-rewritten version of every query and records the verdict:
-   `IMPROVED`, `WORSE`, `NO_MEANINGFUL_CHANGE`, or `COULD_NOT_VERIFY`
-   (e.g. if the AI's rewrite had a SQL syntax error — worth flagging on
-   its own).
+## Repo contents
 
-6. **Load `results/verified_results.csv` into Power BI** and build:
-   - A summary card: % of AI suggestions that measurably improved performance
-     (overall, across all 120)
-   - **A breakdown by category** (`filename` prefix `c01`–`c15`, or split
-     `issue_type` out into its own column) — this is the most important
-     visual, since "AI is 60% reliable overall" is far less useful than
-     "AI is 90% reliable on missing-index issues but only 30% reliable on
-     join-fanout issues"
-   - A before/after execution-time comparison chart, faceted or filterable
-     by category
-   - A callout for any `COULD_NOT_VERIFY` cases — these are important:
-     it means the AI's suggested SQL didn't even run, which is a finding
-     in itself.
+| File | Purpose |
+|---|---|
+| `schema.sql` | Database schema |
+| `generate_data.py` / `load_data.sql` | Synthetic data generation & loading |
+| `generate_queries.py` | Generates the 120 test queries |
+| `queries/` | The 120 generated `.sql` files |
+| `ai_audit.py` | Sends queries to Claude, gets structured review + rewrite |
+| `verify_with_explain.py` | Runs `EXPLAIN ANALYZE`, produces verdicts |
+| `results/verified_results.csv` | Final results feeding the dashboard |
+| `fetch_real_world_queries.py` / `audit_real_world.py` | Optional real-world qualitative supplement |
+| `ai_sql_auditor_dashboard.pbix` | Power BI dashboard |
+| `SETUP.md` | Full step-by-step local setup instructions |
 
-## Writing up the results
+## Running it yourself
 
-For your resume / portfolio page, the finding you want to highlight is the
-category-level breakdown, not just one overall number: e.g. *"Audited 120
-SQL queries across 15 anti-pattern categories using Claude. AI flagged an
-issue in the large majority of queries, but verified performance impact via
-EXPLAIN ANALYZE varied sharply by category — reliable fixes for some issue
-types, and suggestions that measurably underperformed or failed to execute
-for others."* Fill in your actual numbers once you have them — that's a
-stronger, more specific claim than a single aggregate percentage, and it
-shows you did a structured comparison rather than a handful of anecdotes.
+```bash
+# 1. Set up the database
+createdb sql_auditor
+psql -d sql_auditor -f schema.sql
 
-## Optional supplement: real-world queries (qualitative only)
+# 2. Generate and load synthetic data
+pip install faker
+python generate_data.py
+psql -d sql_auditor -f load_data.sql
 
-For extra credibility, you can also pull genuine open-source SQL files and
-have Claude review them — clearly labeled as a separate, unverified
-supplement (these use a different schema than your sandbox, so they can't
-be run through `EXPLAIN ANALYZE`):
+# 3. Generate the 120 test queries
+python generate_queries.py
 
-```
-pip install requests --break-system-packages
-python fetch_real_world_queries.py      # pulls real .sql files from dbt-labs' public "jaffle shop" demo project via GitHub's API
-python audit_real_world.py              # sends them to Claude for style/pattern review only
+# 4. Run the AI audit (requires an Anthropic API key)
+pip install anthropic
+export ANTHROPIC_API_KEY="your-key-here"
+python ai_audit.py
+
+# 5. Verify against real query plans
+pip install psycopg2-binary
+export SQL_AUDITOR_DSN="dbname=sql_auditor user=postgres password=yourpassword"
+python verify_with_explain.py
+
+# 6. Open results/verified_results.csv in Power BI, or open the .pbix directly
 ```
 
-This writes `results/real_world_review.json`. **Important:** when you write
-this up, be explicit that this part is AI-review-only, with no execution
-verification — don't blend these findings into your 120-query verified
-numbers. Presented honestly, it's a nice add-on ("I also spot-checked
-against real open-source SQL, not just synthetic benchmark queries") without
-overstating what was actually verified.
+See `SETUP.md` for the fully detailed walkthrough, including Windows-specific
+notes and troubleshooting.
 
-## Notes / things to be upfront about if asked in an interview
+## Honest limitations
 
-- 120 queries across 15 categories (8 variants each) is a solid scale for
-  a portfolio project, but it's still a synthetic benchmark on synthetic
-  data — say so if asked. It's not a claim about every possible SQL
-  pattern or every LLM.
-- Results will vary by model and by how the prompt is worded — mention
-  which model you used (Claude Sonnet) and that results aren't necessarily
-  representative of every LLM or every prompting strategy.
+- 120 queries across 15 categories is a solid scale for a portfolio
+  project, but it's a synthetic benchmark on synthetic data, not a claim
+  about every SQL pattern or every LLM.
+- Results are specific to the model used (Claude Sonnet) and the exact
+  prompt — a different model or prompt could reasonably produce different
+  reliability numbers.
+- One bug was caught and fixed mid-project (a missing `SELECT` keyword in
+  the correlated-subquery query template caused 8 queries to be
+  unexecutable as originally written) — fixed and re-verified before the
+  final results above.
