@@ -62,7 +62,7 @@ categories) to say something more specific than a one-off anecdote.
 
 ## Tech stack
 
-Python · PostgreSQL · Claude API (Anthropic) · Power BI · GitHub API
+Python · PostgreSQL · Claude API (Anthropic) · Power BI 
 
 ## Repo contents
 
